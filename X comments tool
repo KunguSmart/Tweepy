@@ -1,0 +1,46 @@
+auth = tweepy.OAuth1UserHandler(api_key, api_key_secret, access_token, access_token_secret)
+api = tweepy.API(auth)
+
+def generate_reply(prompt):
+    response = openai.Completion.create(
+        engine="text-davinci-003",
+        prompt=prompt,
+        max_tokens=60
+    )
+    return response.choices[0].text.strip()
+
+def reply_to_tweet(tweet_id, prompt):
+    reply_texts = [generate_reply(prompt) for _ in range(30)]
+    for reply in reply_texts:
+        try:
+            api.update_status(status=reply, in_reply_to_status_id=tweet_id, auto_populate_reply_metadata=True)
+            print(f"Replied: {reply}")
+        except tweepy.TweepyException as e:
+            print(f"Error: {e}")
+        time.sleep(random.uniform(5, 10))  # Add a delay to avoid rate limits
+
+if __name__ == "__main__":
+    tweet_id = 'your_tweet_id'
+    prompt = "Generate a reply to this tweet"
+    reply_to_tweet(tweet_id, prompt) 
+def generate_reply(prompt):
+    response = openai.Completion.create(
+        engine="text-davinci-003",
+        prompt=prompt,
+        max_tokens=60
+    )
+    return response.choices[0].text.strip()
+def reply_to_tweet(tweet_id, prompt):
+    reply_texts = [generate_reply(prompt) for _ in range(30)]
+    for reply in reply_texts:
+        try:
+            api.update_status(status=reply, in_reply_to_status_id=tweet_id, auto_populate_reply_metadata=True)
+            print(f"Replied: {reply}")
+        except tweepy.TweepyException as e:
+            print(f"Error: {e}")
+        time.sleep(random.uniform(5, 10))  # Add a delay to avoid rate limits
+if __name__ == "__main__":
+    tweet_id = 'your_tweet_id'
+    prompt = "Generate a reply to this tweet"
+    reply_to_tweet(tweet_id, prompt)
+python twitter_reply_bot.py
